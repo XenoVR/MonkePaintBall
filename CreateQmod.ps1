@@ -1,10 +1,10 @@
 if (-not $env:qmodName) 
 {
-    $env:qmodName = "GorillaCosmetics"
+    $env:qmodName = "PaintBall"
 }  
 if (-not $env:module_id)
 {
-    $env:module_id = "gorillacosmetics"
+    $env:module_id = "paintball"
 }
 
 $zip = $env:qmodName + ".zip"
@@ -115,7 +115,8 @@ if (Test-Path $qmod)
 {
     move-item -Force $qmod $zip
 }
-
+$msg = "Creating qmod for module " + $env:module_id + " With name " + $qmod
+echo $msg
 Compress-Archive -Path $fileList -DestinationPath $zip -Update
 
 & move-item -Force $zip $qmod
