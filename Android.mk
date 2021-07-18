@@ -71,7 +71,7 @@ include $(PREBUILT_SHARED_LIBRARY)
 # In addition, ensure that you add them to the shared library build below.
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := paintball
+LOCAL_MODULE := monkepaintball
 LOCAL_SRC_FILES += $(call rwildcard,src/**,*.cpp)
 LOCAL_SRC_FILES += $(call rwildcard,extern/beatsaber-hook/src/inline-hook,*.cpp)
 LOCAL_SRC_FILES += $(call rwildcard,extern/beatsaber-hook/src/inline-hook,*.c)
@@ -84,6 +84,6 @@ LOCAL_SHARED_LIBRARIES += zip
 LOCAL_SHARED_LIBRARIES += gorilla-utils
 LOCAL_SHARED_LIBRARIES += monkecodegen
 LOCAL_LDLIBS += -llog
-LOCAL_CFLAGS += -I'extern/libil2cpp/il2cpp/libil2cpp' -isystem 'extern' -I'extern/monkecodegen/include' -DID='"PaintBall"' -DVERSION='"1.1.0"' -I'./shared' -I'./extern' -Wno-inaccessible-base
+LOCAL_CFLAGS += -I'extern/libil2cpp/il2cpp/libil2cpp' -isystem 'extern' -I'extern/monkecodegen/include' -DID='"PaintBall"' -DVERSION='"1.1.1"' -I'./shared' -I'./extern' -Wno-inaccessible-base
 LOCAL_C_INCLUDES += ./include ./src
 include $(BUILD_SHARED_LIBRARY)
