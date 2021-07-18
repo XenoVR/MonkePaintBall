@@ -6,7 +6,7 @@
 #include "config.hpp"
 #include "MaterialColorCache.hpp"
 
-DEFINE_TYPE(PaintBall::PaintBallSettingsView);
+DEFINE_TYPE(PaintBall, PaintBallSettingsView);
 
 extern Logger& getLogger();
 

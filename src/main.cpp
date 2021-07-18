@@ -1,6 +1,7 @@
 #include "config.hpp"
 #include "beatsaber-hook/shared/utils/logging.hpp"
 #include "beatsaber-hook/shared/utils/il2cpp-utils.hpp"
+#include "beatsaber-hook/shared/utils/hooking.hpp"
 #include "modloader/shared/modloader.hpp"
 #include "monkecomputer/shared/CommandRegister.hpp"
 #include "monkecomputer/shared/Register.hpp"
@@ -54,12 +55,12 @@ T max (T first, T second, T third)
     return max(max(first, second), third);
 }
 
-
+using VRRig = GlobalNamespace::VRRig;
 using namespace UnityEngine;
 
 bool allowPaintBall = true;
 
-MAKE_HOOK_OFFSETLESS(Player_Awake, void, GorillaLocomotion::Player* self)
+MAKE_HOOK_MATCH(Player_Awake, &GorillaLocomotion::Player::Awake, void, GorillaLocomotion::Player* self)
 {
     Player_Awake(self);
 
@@ -70,10 +71,10 @@ MAKE_HOOK_OFFSETLESS(Player_Awake, void, GorillaLocomotion::Player* self)
     leftHand->get_gameObject()->AddComponent<PaintBall::Gun*>();
     PaintBall::RayCastPlayerSelector* rightSelector = rightHand->get_gameObject()->AddComponent<PaintBall::RayCastPlayerSelector*>();
     rightSelector->isRight = true;
-    PaintBall::RayCastPlayerSelector::useLeftHand = false;
+    PaintBall::RayCastPlayerSelector::useLeftHand() = false;
 }
 
-MAKE_HOOK_OFFSETLESS(VRRig_InitializeNoobMaterial, void, GlobalNamespace::VRRig* self, float red, float green, float blue, Photon::Pun::PhotonMessageInfo info)
+MAKE_HOOK_MATCH(VRRig_InitializeNoobMaterial, &VRRig::InitializeNoobMaterial, void, GlobalNamespace::VRRig* self, float red, float green, float blue, Photon::Pun::PhotonMessageInfo info)
 {
     // if not in room, run normal code
     if (!Photon::Pun::PhotonNetwork::get_InRoom())
@@ -142,12 +143,10 @@ extern "C" void load()
     using namespace Photon::Realtime;
 
     Logger& logger = getLogger();
-    INSTALL_HOOK_OFFSETLESS(logger, Player_Awake, il2cpp_utils::FindMethodUnsafe("GorillaLocomotion", "Player", "Awake", 0));
-    INSTALL_HOOK_OFFSETLESS(logger, VRRig_InitializeNoobMaterial, il2cpp_utils::FindMethodUnsafe("", "VRRig", "InitializeNoobMaterial", 4));
+    INSTALL_HOOK(logger, Player_Awake);
+    INSTALL_HOOK(logger, VRRig_InitializeNoobMaterial);
 
-    custom_types::Register::RegisterType<PaintBall::RayCastPlayerSelector>();
-    custom_types::Register::RegisterType<PaintBall::Gun>();
-    custom_types::Register::RegisterType<PaintBall::PaintBallSettingsView>();
+    custom_types::Register::AutoRegister();
 
     GorillaUI::Register::RegisterSettingsView<PaintBall::PaintBallSettingsView*>("Paint Ball", VERSION);
     GorillaUI::Register::RegisterWatchView<PaintBall::PaintBallSettingsView*>("Paint Ball", VERSION);
@@ -251,18 +250,18 @@ extern "C" void load()
     }, "Allows you to change the way painting works, using arguments to specify what is being changed\n  Please use the command as follows:\n  PAINT MODE\n  PAINT MODE [(M)ONKE/(R)EST/(A)LL]\n  PAINT COLOR\n  PAINT COLOR [(R)ANDOM/(O)WN]\n  PAINT [ENABLE/DISABLE]");
     
     GorillaUtils::RegisterDisablingValue(ID, VERSION, allowPaintBall, true, {"MODDED", "PAINTBALL_CASUAL"});
-    GorillaUtils::MatchMakingCallbacks::add_OnJoinedRoom([&](){
+    GorillaUtils::MatchMakingCallbacks::onJoinedRoomEvent() += {[&](){
         if (!allowPaintBall)
         {
             PaintBall::MaterialColorCache::Reset();
         }
 
         GorillaUtils::Player::SetProperty<bool>(Photon::Pun::PhotonNetwork::get_LocalPlayer(), "paintballEnabled", config.enabled);
-    });
+    }};
 
-    GorillaUtils::InRoomCallbacks::add_OnPlayerPropertiesUpdate([&](Photon::Realtime::Player* player, ExitGames::Client::Photon::Hashtable* changedProp) -> void {
+    GorillaUtils::InRoomCallbacks::onPlayerPropertiesUpdateEvent() += {[&](Photon::Realtime::Player* player, ExitGames::Client::Photon::Hashtable* changedProp) -> void {
         PaintBall::EnabledCache::add(player);
-    });
+    }};
 
     /*
     GorillaUI::CommandRegister::RegisterCommand("material", [](std::vector<std::string> args) -> std::string {

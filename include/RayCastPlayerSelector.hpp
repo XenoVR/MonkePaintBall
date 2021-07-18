@@ -9,30 +9,15 @@
 
 DECLARE_CLASS_CODEGEN(PaintBall, RayCastPlayerSelector, UnityEngine::MonoBehaviour,
     DECLARE_INSTANCE_FIELD(bool, isRight);
-    DECLARE_METHOD(void, Update);
-    DECLARE_METHOD(void, Awake);
-    DECLARE_METHOD(UnityEngine::GameObject*, AttemptToFindPlayer);
+    DECLARE_INSTANCE_METHOD(void, Update);
+    DECLARE_INSTANCE_METHOD(void, Awake);
+    DECLARE_INSTANCE_METHOD(UnityEngine::GameObject*, AttemptToFindPlayer);
     DECLARE_CTOR(ctor);
 
-    DECLARE_METHOD(static UnityEngine::GameObject*, get_selectedPlayer);
-    DECLARE_METHOD(static void, disable_point);
-    DECLARE_METHOD(static void, set_PointColor, UnityEngine::Color color);
+    DECLARE_STATIC_METHOD(UnityEngine::GameObject*, get_selectedPlayer);
+    DECLARE_STATIC_METHOD(void, disable_point);
+    DECLARE_STATIC_METHOD(void, set_PointColor, UnityEngine::Color color);
     DECLARE_STATIC_FIELD(UnityEngine::GameObject*, selectedPlayer);
     DECLARE_STATIC_FIELD(UnityEngine::Transform*, raycastEndPoint);
     DECLARE_STATIC_FIELD(bool, useLeftHand);
-
-    REGISTER_FUNCTION(
-        REGISTER_METHOD(ctor);
-        REGISTER_METHOD(Update);
-        REGISTER_METHOD(Awake);
-        REGISTER_METHOD(get_selectedPlayer);
-        REGISTER_METHOD(AttemptToFindPlayer);
-        REGISTER_METHOD(set_PointColor);
-        REGISTER_METHOD(disable_point);
-        REGISTER_FIELD(isRight);
-
-        REGISTER_FIELD(selectedPlayer);
-        REGISTER_FIELD(raycastEndPoint);
-        REGISTER_FIELD(useLeftHand);
-    )
 )

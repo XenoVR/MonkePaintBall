@@ -17,7 +17,7 @@
 #include "GlobalNamespace/OVRInput_Button.hpp"
 
 
-DEFINE_TYPE(PaintBall::RayCastPlayerSelector);
+DEFINE_TYPE(PaintBall, RayCastPlayerSelector);
 
 using namespace UnityEngine;
 
@@ -27,10 +27,6 @@ extern bool allowPaintBall;
 
 namespace PaintBall
 {
-    bool RayCastPlayerSelector::useLeftHand = false;
-    GameObject* RayCastPlayerSelector::selectedPlayer = nullptr;
-    Transform* RayCastPlayerSelector::raycastEndPoint = nullptr;
-
     void RayCastPlayerSelector::ctor()
     {
         isRight = false;
@@ -38,15 +34,15 @@ namespace PaintBall
 
     void RayCastPlayerSelector::Awake()
     {
-        if (!raycastEndPoint)
+        if (!raycastEndPoint())
         {
             GameObject* point = GameObject::CreatePrimitive(PrimitiveType::Sphere);
             Object::DontDestroyOnLoad(point);
-            raycastEndPoint = point->get_transform();
+            raycastEndPoint() = point->get_transform();
 
             Collider* col = point->GetComponent<Collider*>();
             Object::DestroyImmediate(col);
-            raycastEndPoint->set_localScale(Vector3::get_one() * 0.1f);
+            raycastEndPoint()->set_localScale(Vector3::get_one() * 0.1f);
         }
     }
 
@@ -54,8 +50,8 @@ namespace PaintBall
     {
         // if not different, return
         // this means that if they differ, we continue
-        if (!(useLeftHand ^ isRight)) return;
-        selectedPlayer = AttemptToFindPlayer();
+        if (!(useLeftHand() ^ isRight)) return;
+        selectedPlayer() = AttemptToFindPlayer();
     }
 
     GameObject* RayCastPlayerSelector::AttemptToFindPlayer()
@@ -77,12 +73,12 @@ namespace PaintBall
         // if different the value assigned would be leftInput anyways so this makes it quicker
         if (rightInput ^ leftInput)
         {
-            useLeftHand = leftInput;
+            useLeftHand() = leftInput;
         }
 
         if (Physics::Raycast(transform->get_position() + transform->get_forward().get_normalized() * 0.1f, transform->get_forward(), hit, 100.0f, layermask) && input)
         {
-            raycastEndPoint->set_position(hit.get_point());
+            raycastEndPoint()->set_position(hit.get_point());
             GameObject* obj = hit.get_collider()->get_gameObject();
             GlobalNamespace::VRRig* rig = obj->GetComponentInParent<GlobalNamespace::VRRig*>();
 
@@ -111,21 +107,21 @@ namespace PaintBall
     
     GameObject* RayCastPlayerSelector::get_selectedPlayer()
     {
-        return selectedPlayer;
+        return selectedPlayer();
     }
 
     void RayCastPlayerSelector::disable_point()
     {
-        if (!raycastEndPoint) return;
-        Renderer* renderer = raycastEndPoint->GetComponentInChildren<Renderer*>();
+        if (!raycastEndPoint()) return;
+        Renderer* renderer = raycastEndPoint()->GetComponentInChildren<Renderer*>();
         renderer->set_enabled(false);
     }
 
     void RayCastPlayerSelector::set_PointColor(Color color)
     {
-        if (!raycastEndPoint || !allowPaintBall || !config.enabled) return;
+        if (!raycastEndPoint() || !allowPaintBall || !config.enabled) return;
 
-        Renderer* renderer = raycastEndPoint->GetComponentInChildren<Renderer*>();
+        Renderer* renderer = raycastEndPoint()->GetComponentInChildren<Renderer*>();
         renderer->set_enabled(true);
         renderer->get_material()->set_color(color);
     }

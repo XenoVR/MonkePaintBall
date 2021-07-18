@@ -6,7 +6,9 @@
     "id": "PaintBall",
     "version": "0.1.0",
     "url": null,
-    "additionalData": {}
+    "additionalData": {
+      "overrideSoName": "libmonkepaintball.so"
+    }
   },
   "dependencies": [
     {
@@ -21,12 +23,12 @@
     },
     {
       "id": "beatsaber-hook",
-      "versionRange": "^1.0.0",
+      "versionRange": "^2.0.0",
       "additionalData": {}
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.8.3",
+      "versionRange": "^0.12.0",
       "additionalData": {}
     },
     {

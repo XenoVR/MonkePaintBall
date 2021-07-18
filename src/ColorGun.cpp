@@ -19,7 +19,7 @@
 #include "gorilla-utils/shared/CustomProperties/Player.hpp"
 #include "gorilla-utils/shared/Utils/RPC.hpp"
 
-DEFINE_TYPE(PaintBall::Gun);
+DEFINE_TYPE(PaintBall, Gun);
 
 namespace GorillaUI::BaseGameInterface::PlayerColor {
     UnityEngine::Color get_color();
@@ -44,7 +44,7 @@ namespace PaintBall
         GameObject* obj = nullptr;
         if ((rightInput || leftInput) && allowPaintBall && config.enabled)
         {
-            if (rightInput && !RayCastPlayerSelector::useLeftHand)
+            if (rightInput && !RayCastPlayerSelector::useLeftHand())
             {
                 if (!wasRightInput)
                 {
@@ -57,9 +57,9 @@ namespace PaintBall
             else if (rightInput)
             {
                 // switch to right
-                //RayCastPlayerSelector::useLeftHand = false;
+                //RayCastPlayerSelector::useLeftHand() = false;
             }
-            else if (leftInput && RayCastPlayerSelector::useLeftHand)
+            else if (leftInput && RayCastPlayerSelector::useLeftHand())
             {
                 if (!wasLeftInput)
                 {
@@ -72,7 +72,7 @@ namespace PaintBall
             else if (leftInput)
             {
                 // switch to right
-                //RayCastPlayerSelector::useLeftHand = true;
+                //RayCastPlayerSelector::useLeftHand() = true;
             }
         }
         else
