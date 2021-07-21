@@ -163,7 +163,7 @@ jobs:
         allow_failure: false
 
     - name: Files Exist
-      if: steps.check_files.outputs.files_exists == 'true'
+      if: steps.check_files.outputs.files_exists == 'false'
       run: |
           exit 1
 
