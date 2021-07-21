@@ -154,6 +154,7 @@ jobs:
     - name: CD to bs-hook src
       run: |
         cd ${GITHUB_WORKSPACE}/extern/beatsaber-hook/src/inline-hook
+        ls ./
 
     - name: Check Inline Hook existence
       id: check_files
