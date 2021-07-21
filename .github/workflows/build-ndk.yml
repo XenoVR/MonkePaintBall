@@ -164,8 +164,9 @@ jobs:
 
     - name: Files Exist
       if: steps.check_files.outputs.files_exists == 'true'
-      exit: failure
-      
+      run: |
+          exit 1
+
     # actually run the build script
     - name: Build
       run: |
