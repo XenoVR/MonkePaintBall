@@ -80,6 +80,18 @@ jobs:
         ls -la ${GITHUB_WORKSPACE}/extern/
         ls -la QPM_Temp
         
+    - name: Check Inline Hook existence
+      id: check_files
+      uses: andstor/file-existence-action@v1
+      with:
+        files: "extern/beatsaber-hook/src/inline-hook/And64InlineHook.cpp, extern/beatsaber-hook/src/inline-hook/inlineHook.c, extern/beatsaber-hook/src/inline-hook/relocate.c"
+        allow_failure: false
+
+    - name: Files Exist
+      if: steps.check_files.outputs.files_exists == 'false'
+      run: |
+          exit 1
+
     - name: Get Tag Version
       id: get_tag_version
       run: |
