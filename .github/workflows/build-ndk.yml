@@ -162,8 +162,9 @@ jobs:
         files: "And64InlineHook.cpp, inlineHook.c, relocate.c"
         allow_failure: false
 
-#    - name: Files Exist
-#      if: steps.check_files.outputs.files_exists == 'true'
+    - name: Files Exist
+      if: steps.check_files.outputs.files_exists == 'true'
+      exit: failure
       
     # actually run the build script
     - name: Build
