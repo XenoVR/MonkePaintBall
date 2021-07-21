@@ -150,13 +150,19 @@ jobs:
       run: |
         ls -la ${GITHUB_WORKSPACE}/extern/
         ls -la QPM_Temp
+    - name: CD to bs-hook src
+      run: cd ${GITHUB_WORKSPACE}/extern/beatsaber-hook/src/inline-hook
+
     - name: Check Inline Hook existence
       id: check_files
-      run: cd ${GITHUB_WORKSPACE}/extern/beatsaber-hook/src/inline-hook
       uses: andstor/file-existence-action@v1
       with:
         files: "And64InlineHook.cpp, inlineHook.c, relocate.c"
         allow_failure: false
+        
+    - name: Files Exist
+      if: steps.check_files.outputs.files_exists == 'true'
+      failure
 
     # actually run the build script
     - name: Build
