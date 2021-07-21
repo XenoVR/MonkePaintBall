@@ -151,16 +151,16 @@ jobs:
         ls -la ${GITHUB_WORKSPACE}/extern/
         ls -la QPM_Temp
 
-    - name: CD to bs-hook src
-      run: |
-        cd ${GITHUB_WORKSPACE}/extern/beatsaber-hook/src/inline-hook
-        ls ./
+#    - name: CD to bs-hook src
+#      run: |
+#        cd ${GITHUB_WORKSPACE}/extern/beatsaber-hook/src/inline-hook
+#        ls ./
 
     - name: Check Inline Hook existence
       id: check_files
       uses: andstor/file-existence-action@v1
       with:
-        files: "And64InlineHook.cpp, inlineHook.c, relocate.c"
+        files: "extern/beatsaber-hook/src/inline-hook/And64InlineHook.cpp, extern/beatsaber-hook/src/inline-hook/inlineHook.c, extern/beatsaber-hook/src/inline-hook/relocate.c"
         allow_failure: false
 
     - name: Files Exist
